@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Response } from 'express';
 import { User } from 'src/users/models/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -15,6 +15,8 @@ import {
   JWT_REFRESH_TOKEN_SECRET,
   REFRESH_COOKIE_NAME,
 } from './constants';
+
+
 
 @Injectable()
 export class AuthService {
@@ -153,15 +155,22 @@ export class AuthService {
       },
     };
   }
+
+   
   genCookieFromJwtRefreshToken(userId: number): Cookie {
     const tokenPayload: TokenPayload = { userId };
+
     const expirationTime: number = this.configService.get<number>(
       JWT_REFRESH_TOKEN_EXPIRATION_TIME,
     );
-    const token = this.jwtService.sign(tokenPayload, {
+
+    const refreshTokenOptions : JwtSignOptions = {
       secret: this.configService.get<string>(JWT_REFRESH_TOKEN_SECRET),
-      expiresIn: `${expirationTime}s`,
-    });
+      expiresIn: `${expirationTime}h`,
+    }
+    
+
+    const token = this.jwtService.sign(tokenPayload, refreshTokenOptions);
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + expirationTime);
     return {
