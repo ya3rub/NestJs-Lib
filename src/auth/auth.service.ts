@@ -16,8 +16,6 @@ import {
   REFRESH_COOKIE_NAME,
 } from './constants';
 
-
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -37,12 +35,20 @@ export class AuthService {
   }
 
   async login(user: User, res: Response) {
-    const authCookie = this.genCookieFromJwtAccessToken(user.id);
-    const refreshCookie = this.genCookieFromJwtRefreshToken(user.id);
-    await this.usersService.setCurrentRefreshToken(
-      refreshCookie.value,
-      user.id,
+    const tokenPayload: TokenPayload = { userId: user.id };
+    const { refreshToken, refreshTokenExpirationTime } =
+      this.genRefreshToken(tokenPayload);
+    const { accessToken, accessTokenExpirationTime } =
+      this.genAccessToken(tokenPayload);
+    const authCookie = this.genCookieFromJwtAccessToken(
+      accessToken,
+      refreshTokenExpirationTime,
     );
+    const refreshCookie = this.genCookieFromJwtRefreshToken(
+      refreshToken,
+      accessTokenExpirationTime,
+    );
+    await this.usersService.setCurrentRefreshToken(refreshToken, user.id);
     res.cookie(authCookie.name, authCookie.value, authCookie.options);
     res.cookie(refreshCookie.name, refreshCookie.value, refreshCookie.options);
   }
@@ -72,7 +78,15 @@ export class AuthService {
   }
 
   async refresh(user: User, res: Response) {
-    const authCookie = this.genCookieFromJwtAccessToken(user.id);
+    const tokenPayload: TokenPayload = {
+      userId: user.id,
+    };
+    const { accessToken, accessTokenExpirationTime } =
+      this.genAccessToken(tokenPayload);
+    const authCookie = this.genCookieFromJwtAccessToken(
+      accessToken,
+      accessTokenExpirationTime,
+    );
     res.cookie(authCookie.name, authCookie.value, authCookie.options);
   }
   async authenticatedUser(email: string, plainTextPassword: string) {
@@ -136,19 +150,16 @@ export class AuthService {
     }
   }
 
-  genCookieFromJwtAccessToken(userId: number): Cookie {
-    const tokenPayload: TokenPayload = {
-      userId,
-    };
-    const token = this.jwtService.sign(tokenPayload);
+  genCookieFromJwtAccessToken(
+    accessToken: string,
+    expirationTime: number,
+  ): Cookie {
     const expires = new Date();
-    expires.setSeconds(
-      expires.getSeconds() +
-        this.configService.get(JWT_ACCESS_TOKEN_EXPIRATION),
-    );
+    expires.setSeconds(expires.getSeconds() + expirationTime);
+
     return {
       name: AUTH_COOKIE_NAME,
-      value: token,
+      value: accessToken,
       options: {
         httpOnly: true,
         expires,
@@ -156,31 +167,45 @@ export class AuthService {
     };
   }
 
-   
-  genCookieFromJwtRefreshToken(userId: number): Cookie {
-    const tokenPayload: TokenPayload = { userId };
-
-    const expirationTime: number = this.configService.get<number>(
-      JWT_REFRESH_TOKEN_EXPIRATION_TIME,
-    );
-
-    const refreshTokenOptions : JwtSignOptions = {
-      secret: this.configService.get<string>(JWT_REFRESH_TOKEN_SECRET),
-      expiresIn: `${expirationTime}h`,
-    }
-    
-
-    const token = this.jwtService.sign(tokenPayload, refreshTokenOptions);
+  genCookieFromJwtRefreshToken(
+    refreshToken: string,
+    expirationTime: number,
+  ): Cookie {
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + expirationTime);
     return {
       name: REFRESH_COOKIE_NAME,
-      value: token,
+      value: refreshToken,
       options: {
         path: '/',
         httpOnly: true,
         expires,
       },
     };
+  }
+
+  genAccessToken(tokenPayload: TokenPayload) {
+    const accessTokenExpirationTime: number = this.configService.get(
+      JWT_ACCESS_TOKEN_EXPIRATION,
+    );
+    const accessToken = this.jwtService.sign(tokenPayload);
+    return { accessToken, accessTokenExpirationTime };
+  }
+
+  genRefreshToken(tokenPayload: TokenPayload) {
+    const refreshTokenExpirationTime: number = this.configService.get<number>(
+      JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+    );
+
+    const refreshTokenOptions: JwtSignOptions = {
+      secret: this.configService.get<string>(JWT_REFRESH_TOKEN_SECRET),
+      expiresIn: `${refreshTokenExpirationTime}s`,
+    };
+
+    const refreshToken = this.jwtService.sign(
+      tokenPayload,
+      refreshTokenOptions,
+    );
+    return { refreshToken, refreshTokenExpirationTime };
   }
 }
