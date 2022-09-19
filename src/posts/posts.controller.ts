@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import PostsService from './posts.service';
-import CreatePostDto from './dto/createPost.dto';
-import UpdatePostDto from './dto/updatePost.dto';
+import {CreatePostDto} from './dto/createPost.dto';
+import {UpdatePostDto} from './dto/updatePost.dto';
+import { IdParams } from '@app/utils/validations';
 
 @Controller('posts')
 export default class PostsController {
@@ -15,7 +16,7 @@ export default class PostsController {
   }
 
   @Get(':id')
-  getPostById(@Param('id') id: string) {
+  getPostById(@Param() {id}: IdParams) {
     return this.postsService.getPostById(Number(id));
   }
 

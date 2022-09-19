@@ -1,9 +1,5 @@
 import { PostgresErrorCode } from '@app/database';
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user-request.dto';
 
 import {
@@ -12,8 +8,7 @@ import {
   UserIdNotFoundException,
 } from './exceptions';
 import { UsersRepository } from './users.repository';
-
-
+import * as argon from 'argon2'
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
@@ -38,7 +33,6 @@ export class UsersService {
     if (user) {
       return user;
     }
-    console.log('not found');
     throw new UserEmailNotFoundException(email);
   }
 
@@ -47,7 +41,18 @@ export class UsersService {
     if (user) {
       return user;
     }
-    console.log('not found');
     throw new UserIdNotFoundException(userId);
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, userId: number) {
+    const currentHashedRefreshToken = await argon.hash(refreshToken);
+
+    return await this.usersRepository.update(userId, { currentHashedRefreshToken });
+  }
+
+  async removeRefreshToken(userId: number) {
+    return await this.usersRepository.update(userId, {
+      currentHashedRefreshToken: ''
+    });
   }
 }

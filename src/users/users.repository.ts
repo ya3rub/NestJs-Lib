@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CreateUserDto } from './dto';
 import { User } from './models/user.entity';
 
@@ -28,5 +29,9 @@ export class UsersRepository /*extends AbstractRepository*/ {
     const newUser = await this.usersRepository.create(userData);
     await this.usersRepository.save(newUser);
     return newUser;
+  }
+
+  async update(userId:number,updateQuery : QueryDeepPartialEntity<User>){
+    return await this.usersRepository.update(userId,updateQuery)
   }
 }
