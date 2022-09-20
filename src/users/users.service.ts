@@ -13,7 +13,7 @@ import * as argon from 'argon2'
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async create(createUserData: CreateUserDto) {
+  async createUser(createUserData: CreateUserDto) {
     try {
       const createdUser = await this.usersRepository.create(createUserData);
       return createdUser;

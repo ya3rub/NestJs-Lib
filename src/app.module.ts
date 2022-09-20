@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import * as joi from 'joi';
 import { DatabaseModule } from '@app/database';
 import { AuthModule } from './auth/auth.module';
@@ -12,6 +10,7 @@ import {
   ExceptionsLoggerFilter,
   NotFoundHttpExceptionFilter,
 } from '@app/utils/exceptions';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,9 +34,8 @@ import {
     UsersModule,
     PostsModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_FILTER,
       useClass: ExceptionsLoggerFilter,
