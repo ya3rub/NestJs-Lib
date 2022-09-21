@@ -18,5 +18,11 @@ export class User extends AbstractEntity {
   @Exclude()
   public currentHashedRefreshToken?: string;
 
+  @Column({ default: false })
+  public is2FAEnabled: boolean;
+
+  @Column({ nullable: true })
+  public twoFASecret?: string;
+
 }
 

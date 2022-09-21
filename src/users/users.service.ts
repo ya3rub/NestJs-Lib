@@ -8,7 +8,7 @@ import {
   UserIdNotFoundException,
 } from './exceptions';
 import { UsersRepository } from './users.repository';
-import * as argon from 'argon2'
+import * as argon from 'argon2';
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
@@ -47,12 +47,26 @@ export class UsersService {
   async setCurrentRefreshToken(refreshToken: string, userId: number) {
     const currentHashedRefreshToken = await argon.hash(refreshToken);
 
-    return await this.usersRepository.update(userId, { currentHashedRefreshToken });
+    return await this.usersRepository.update(userId, {
+      currentHashedRefreshToken,
+    });
+  }
+
+  async turnOn2FA(userId: number) {
+    return this.usersRepository.update(userId, {
+      is2FAEnabled: true,
+    });
+  }
+
+  async set2FASecret(secret: string, userId: number) {
+    return this.usersRepository.update(userId, {
+      twoFASecret: secret,
+    });
   }
 
   async removeRefreshToken(userId: number) {
     return await this.usersRepository.update(userId, {
-      currentHashedRefreshToken: ''
+      currentHashedRefreshToken: '',
     });
   }
 }

@@ -33,6 +33,9 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.authService.login(user, response);
+    if (user.is2FAEnabled) {
+      return;
+    }
     return user;
   }
 

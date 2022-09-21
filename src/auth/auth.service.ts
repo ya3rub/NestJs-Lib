@@ -36,14 +36,18 @@ export class AuthService {
 
   async login(user: User, res: Response) {
     const tokenPayload: TokenPayload = { userId: user.id };
+
     const { refreshToken, refreshTokenExpirationTime } =
       this.genRefreshToken(tokenPayload);
+
     const { accessToken, accessTokenExpirationTime } =
       this.genAccessToken(tokenPayload);
+
     const authCookie = this.genCookieFromJwtAccessToken(
       accessToken,
       refreshTokenExpirationTime,
     );
+    
     const refreshCookie = this.genCookieFromJwtRefreshToken(
       refreshToken,
       accessTokenExpirationTime,
