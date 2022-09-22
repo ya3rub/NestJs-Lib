@@ -13,10 +13,5 @@ export class User extends AbstractEntity {
   @Column()
   @Exclude()
   public password: string;
-
-  @Column({default:''})
-  @Exclude()
-  public currentHashedRefreshToken?: string;
-
 }
 

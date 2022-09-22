@@ -1,3 +1,4 @@
+
 import { PostgresErrorCode } from '@app/database';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user-request.dto';
@@ -8,12 +9,11 @@ import {
   UserIdNotFoundException,
 } from './exceptions';
 import { UsersRepository } from './users.repository';
-import * as argon from 'argon2'
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async create(createUserData: CreateUserDto) {
+  async createUser(createUserData: CreateUserDto) {
     try {
       const createdUser = await this.usersRepository.create(createUserData);
       return createdUser;
@@ -42,17 +42,5 @@ export class UsersService {
       return user;
     }
     throw new UserIdNotFoundException(userId);
-  }
-
-  async setCurrentRefreshToken(refreshToken: string, userId: number) {
-    const currentHashedRefreshToken = await argon.hash(refreshToken);
-
-    return await this.usersRepository.update(userId, { currentHashedRefreshToken });
-  }
-
-  async removeRefreshToken(userId: number) {
-    return await this.usersRepository.update(userId, {
-      currentHashedRefreshToken: ''
-    });
   }
 }

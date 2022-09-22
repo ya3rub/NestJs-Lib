@@ -1,11 +1,7 @@
 
-//ensure having id
-//@Schema()
+import { PrimaryGeneratedColumn } from "typeorm";
 
-import { Entity, PrimaryGeneratedColumn } from "typeorm";
-
-@Entity()
-export class AbstractEntity {
+export abstract class AbstractEntity {
   @PrimaryGeneratedColumn()
   public id?: number;
 

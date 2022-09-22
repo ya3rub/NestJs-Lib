@@ -1,6 +1,5 @@
 export * from './absrtact.entity'
 export * from './abstract.repository'
-export * from './database.module'
-export * from './database.providers'
+export * from './database.service'
 export * from './postgresErrorCode.enum'
-
+export * from './database.module'

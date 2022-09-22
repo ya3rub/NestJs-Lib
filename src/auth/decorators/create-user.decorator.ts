@@ -1,5 +1,4 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { Response } from 'express';
 import { User } from 'src/users/models/user.entity';
 import { RequestWithUser } from '../interfaces';
 
@@ -12,7 +11,3 @@ export const CurrentUser = createParamDecorator(
     getCurrnetRequestByContext(context).user,
 );
 
-export const CurrentResponse = createParamDecorator(
-  (_data: unknown, context: ExecutionContext): Response =>
-    getCurrnetRequestByContext(context).res,
-);

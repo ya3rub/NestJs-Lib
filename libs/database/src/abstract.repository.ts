@@ -1,30 +1,20 @@
-import { Logger, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { AbstractEntity } from './absrtact.entity';
 
-export abstract class AbstractRepository{
-  protected abstract readonly logger: Logger;
-  constructor() {}
-  //omit id cuz it's auto-generated
-  async create() {
+export abstract class AbstractRepository<T extends AbstractEntity> {
+  //protected abstract readonly logger: Logger;
 
+  constructor(protected readonly entityRepository: Repository<T>) {}
+
+  async create(dto) {
+    const newEntity = await this.entityRepository.create(dto);
+    await this.entityRepository.save(newEntity);
+    return newEntity;
   }
 
-  async findOne(filterQuery) {
-
+  async update(userId:number,updateQuery : QueryDeepPartialEntity<T>){
+    return await this.entityRepository.update(userId,updateQuery)
   }
 
-  async find(filterQuery) {
-
-  }
-
-  async findOneAndUpdate(
-    filterQuery ,
-    update ,
-  ) {
-    const doc = {};
-    if (!doc) {
-      this.logger.warn('Document not Found with Fitler Query: ', filterQuery);
-      throw new NotFoundException('Document Not Found.');
-    }
-    return doc
-  }
 }
