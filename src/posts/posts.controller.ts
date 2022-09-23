@@ -1,14 +1,24 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import PostsService from './posts.service';
-import {CreatePostDto} from './dto/createPost.dto';
-import {UpdatePostDto} from './dto/updatePost.dto';
+import { CreatePostDto } from './dto/createPost.dto';
+import { UpdatePostDto } from './dto/updatePost.dto';
 import { IdParams } from '@app/utils/validations';
+import { CurrentUser } from 'src/auth/decorators';
+import { Permission } from 'src/auth/enums';
+import { AllowIfHas } from 'src/auth/guards';
 
 @Controller('posts')
 export default class PostsController {
-  constructor(
-    private readonly postsService: PostsService
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Get()
   getAllPosts() {
@@ -16,12 +26,14 @@ export default class PostsController {
   }
 
   @Get(':id')
-  getPostById(@Param() {id}: IdParams) {
+  getPostById(@Param() { id }: IdParams) {
     return this.postsService.getPostById(Number(id));
   }
 
   @Post()
-  async createPost(@Body() post: CreatePostDto) {
+  //@UseGuards(AllowOnly(Role.Admin))
+  @UseGuards(AllowIfHas(Permission.CreatePost))
+  async createPost(@CurrentUser() user, @Body() post: CreatePostDto) {
     return this.postsService.createPost(post);
   }
 

@@ -10,7 +10,6 @@ import {
   ExceptionsLoggerFilter,
   NotFoundHttpExceptionFilter,
 } from '@app/utils/exceptions';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
