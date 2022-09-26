@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as joi from 'joi';
 import { DatabaseModule } from '@app/database';
@@ -10,12 +10,15 @@ import {
   ExceptionsLoggerFilter,
   NotFoundHttpExceptionFilter,
 } from '@app/utils/exceptions';
+import { LogsMiddleware } from '@app/utils/loggers';
+import { LoggerModule } from '@app/utils/loggers/logger.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: joi.object({
         PORT: joi.number().required(),
+        DISABLE_DB_LOG: joi.boolean().required(),
         POSTGRES_HOST: joi.string().required(),
         POSTGRES_PORT: joi.number().required(),
         POSTGRES_USER: joi.string().required(),
@@ -32,6 +35,7 @@ import {
     AuthModule,
     UsersModule,
     PostsModule,
+    LoggerModule,
   ],
   controllers: [],
   providers: [
@@ -45,4 +49,8 @@ import {
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LogsMiddleware).forRoutes('*');
+  }
+}

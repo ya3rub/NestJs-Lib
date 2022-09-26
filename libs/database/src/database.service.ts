@@ -8,12 +8,14 @@ import {
   POSTGRES_PASSWORD,
   POSTGRES_PORT,
   POSTGRES_USER,
+  USE_DEFAULT_LOGGER,
 } from './constants';
+//import { DBConsoleLogger } from './dbLogger';
 
 @Injectable()
 export class DatabaseService implements TypeOrmOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
-  createTypeOrmOptions(): TypeOrmModuleOptions {
+  async createTypeOrmOptions(): Promise<TypeOrmModuleOptions> {
     return {
       name: 'default',
       type: DB_POSTGRES_TYPE,
@@ -23,7 +25,10 @@ export class DatabaseService implements TypeOrmOptionsFactory {
       password: this.configService.get<string>(POSTGRES_PASSWORD),
       database: this.configService.get<string>(POSTGRES_DB),
       synchronize: true,
-      logging: true,
+      //logger: new DBConsoleLogger(),
+      logging: JSON.parse(
+        this.configService.get<string>(USE_DEFAULT_LOGGER).toLowerCase(),
+      ),
       entities: [],
       autoLoadEntities: true,
     };
