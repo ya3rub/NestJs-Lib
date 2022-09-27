@@ -16,6 +16,7 @@ import HealthModule from '@app/utils/health/health.module';
 import { SearchModule } from 'libs/search/src';
 import { AppController } from './app.controller';
 import { EmailModule } from '@app/email';
+import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -49,7 +50,8 @@ import { EmailModule } from '@app/email';
     PostsModule,
     LoggerModule,
     HealthModule,
-    EmailModule
+    EmailModule,
+    EmailSchedulingModule
   ],
   controllers: [AppController],
   providers: [
