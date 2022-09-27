@@ -22,6 +22,8 @@
     "@app/utils/(.*)": "<rootDir>/../libs/utils/src/$1",
     "@app/utils": "<rootDir>/../libs/utils/src",
     "@app/search/(.*)": "<rootDir>/../libs/search/src/$1",
-    "@app/search": "<rootDir>/../libs/search/src"
+    "@app/search": "<rootDir>/../libs/search/src",
+    "@app/email/(.*)": "<rootDir>/../libs/email/src/$1",
+    "@app/email": "<rootDir>/../libs/email/src"
   }
 }

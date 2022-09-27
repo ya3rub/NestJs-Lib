@@ -1,0 +1,3 @@
+export const EMAIL_SERVICE = 'EMAIL_SERVICE'
+export const EMAIL_USER = 'EMAIL_USER'
+export const EMAIL_PASSWORD = 'EMAIL_PASSWORD'

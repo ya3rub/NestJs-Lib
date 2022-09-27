@@ -35,6 +35,12 @@
       ],
       "@app/search/*": [
         "libs/search/src/*"
+      ],
+      "@app/email": [
+        "libs/email/src"
+      ],
+      "@app/email/*": [
+        "libs/email/src/*"
       ]
     }
   }

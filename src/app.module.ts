@@ -14,6 +14,8 @@ import { LogsMiddleware } from '@app/utils/loggers';
 import { LoggerModule } from '@app/utils/loggers/logger.module';
 import HealthModule from '@app/utils/health/health.module';
 import { SearchModule } from 'libs/search/src';
+import { AppController } from './app.controller';
+import { EmailModule } from '@app/email';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +36,9 @@ import { SearchModule } from 'libs/search/src';
         ELASTICSEARCH_NODE: joi.string().required(),
         ELASTICSEARCH_USERNAME: joi.string().required(),
         ELASTICSEARCH_PASSWORD: joi.string().required(),
+        EMAIL_SERVICE: joi.string().required(),
+        EMAIL_USER: joi.string().required(),
+        EMAIL_PASSWORD: joi.string().required(),
       }),
       envFilePath: './.env',
     }),
@@ -44,8 +49,9 @@ import { SearchModule } from 'libs/search/src';
     PostsModule,
     LoggerModule,
     HealthModule,
+    EmailModule
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_FILTER,
