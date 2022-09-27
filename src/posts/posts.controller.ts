@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import PostsService from './posts.service';
@@ -20,10 +21,6 @@ import { AllowIfHas } from 'src/auth/guards';
 export default class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Get()
-  getAllPosts() {
-    return this.postsService.getAllPosts();
-  }
 
   @Get(':id')
   getPostById(@Param() { id }: IdParams) {
@@ -45,5 +42,17 @@ export default class PostsController {
   @Delete(':id')
   async deletePost(@Param('id') id: string) {
     return this.postsService.deletePost(Number(id));
+  }
+
+  @Get()
+  async getPosts(@Query('search') search: string) {
+    console.log(`called`);
+    
+    console.log(search);
+    
+    if (search) {
+      return this.postsService.searchForPosts(search);
+    }
+    return this.postsService.getAllPosts();
   }
 }

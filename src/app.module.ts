@@ -13,6 +13,7 @@ import {
 import { LogsMiddleware } from '@app/utils/loggers';
 import { LoggerModule } from '@app/utils/loggers/logger.module';
 import HealthModule from '@app/utils/health/health.module';
+import { SearchModule } from 'libs/search/src';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,7 +21,7 @@ import HealthModule from '@app/utils/health/health.module';
       validationSchema: joi.object({
         PORT: joi.number().required(),
         DISABLE_DB_LOG: joi.boolean().required(),
-        USE_TYPEORM_LOGGER:joi.boolean().required(),
+        USE_TYPEORM_LOGGER: joi.boolean().required(),
         POSTGRES_HOST: joi.string().required(),
         POSTGRES_PORT: joi.number().required(),
         POSTGRES_USER: joi.string().required(),
@@ -30,15 +31,19 @@ import HealthModule from '@app/utils/health/health.module';
         JWT_REFRESH_TOKEN_SECRET: joi.string().required(),
         JWT_ACCESS_TOKEN_EXPIRATION: joi.number().required(),
         JWT_REFRESH_TOKEN_EXPIRATION_TIME: joi.number().required(),
+        ELASTICSEARCH_NODE: joi.string().required(),
+        ELASTICSEARCH_USERNAME: joi.string().required(),
+        ELASTICSEARCH_PASSWORD: joi.string().required(),
       }),
       envFilePath: './.env',
     }),
     DatabaseModule,
+    SearchModule,
     AuthModule,
     UsersModule,
     PostsModule,
     LoggerModule,
-    HealthModule
+    HealthModule,
   ],
   controllers: [],
   providers: [

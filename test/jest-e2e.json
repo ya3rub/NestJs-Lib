@@ -20,6 +20,8 @@
     "yes/database/(.*)": "<rootDir>/../libs/database/src/$1",
     "yes/database": "<rootDir>/../libs/database/src",
     "@app/utils/(.*)": "<rootDir>/../libs/utils/src/$1",
-    "@app/utils": "<rootDir>/../libs/utils/src"
+    "@app/utils": "<rootDir>/../libs/utils/src",
+    "@app/search/(.*)": "<rootDir>/../libs/search/src/$1",
+    "@app/search": "<rootDir>/../libs/search/src"
   }
 }
