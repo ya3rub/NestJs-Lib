@@ -8,7 +8,7 @@ import {
   POSTGRES_PASSWORD,
   POSTGRES_PORT,
   POSTGRES_USER,
-  USE_DEFAULT_LOGGER,
+  USE_TYPEORM_LOGGER,
 } from './constants';
 //import { DBConsoleLogger } from './dbLogger';
 
@@ -26,9 +26,7 @@ export class DatabaseService implements TypeOrmOptionsFactory {
       database: this.configService.get<string>(POSTGRES_DB),
       synchronize: true,
       //logger: new DBConsoleLogger(),
-      logging: JSON.parse(
-        this.configService.get<string>(USE_DEFAULT_LOGGER).toLowerCase(),
-      ),
+      logging: this.configService.get<boolean>(USE_TYPEORM_LOGGER),
       entities: [],
       autoLoadEntities: true,
     };

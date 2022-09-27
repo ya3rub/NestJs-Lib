@@ -12,6 +12,7 @@ import {
 } from '@app/utils/exceptions';
 import { LogsMiddleware } from '@app/utils/loggers';
 import { LoggerModule } from '@app/utils/loggers/logger.module';
+import HealthModule from '@app/utils/health/health.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +20,7 @@ import { LoggerModule } from '@app/utils/loggers/logger.module';
       validationSchema: joi.object({
         PORT: joi.number().required(),
         DISABLE_DB_LOG: joi.boolean().required(),
+        USE_TYPEORM_LOGGER:joi.boolean().required(),
         POSTGRES_HOST: joi.string().required(),
         POSTGRES_PORT: joi.number().required(),
         POSTGRES_USER: joi.string().required(),
@@ -36,6 +38,7 @@ import { LoggerModule } from '@app/utils/loggers/logger.module';
     UsersModule,
     PostsModule,
     LoggerModule,
+    HealthModule
   ],
   controllers: [],
   providers: [
