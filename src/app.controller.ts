@@ -1,15 +1,12 @@
 import { EmailService } from '@app/email';
 import { Controller, Get } from '@nestjs/common';
+import { EmailSchedulingService } from './email-scheduling/email-scheduling.service';
 
 @Controller('')
 export class AppController {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(private readonly emailService: EmailSchedulingService) {}
   @Get()
   async test() {
-    return await this.emailService.sendMail({
-      to: 'he111oworld101@gmail.com',
-      subject: 'test3',
-      text: 'testing3',
-    });
+    
   }
 }

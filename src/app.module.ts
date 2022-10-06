@@ -12,10 +12,9 @@ import {
 } from '@app/utils/exceptions';
 import { LogsMiddleware } from '@app/utils/loggers';
 import { LoggerModule } from '@app/utils/loggers/logger.module';
-import HealthModule from '@app/utils/health/health.module';
+import { HealthModule } from '@app/utils/health/health.module';
 import { SearchModule } from 'libs/search/src';
 import { AppController } from './app.controller';
-import { EmailModule } from '@app/email';
 import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
 @Module({
   imports: [
@@ -50,8 +49,7 @@ import { EmailSchedulingModule } from './email-scheduling/email-scheduling.modul
     PostsModule,
     LoggerModule,
     HealthModule,
-    EmailModule,
-    EmailSchedulingModule
+    EmailSchedulingModule,
   ],
   controllers: [AppController],
   providers: [

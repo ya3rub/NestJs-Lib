@@ -8,4 +8,4 @@ import { TestHealthIndicator } from './indicators/testHealthIndicator';
   controllers: [HealthController],
   providers: [TestHealthIndicator],
 })
-export default class HealthModule {}
+export class HealthModule {}
