@@ -16,6 +16,7 @@ import { HealthModule } from '@app/utils/health/health.module';
 import { SearchModule } from 'libs/search/src';
 import { AppController } from './app.controller';
 import { EmailSchedulingModule } from './email-scheduling/email-scheduling.module';
+import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +40,9 @@ import { EmailSchedulingModule } from './email-scheduling/email-scheduling.modul
         EMAIL_SERVICE: joi.string().required(),
         EMAIL_USER: joi.string().required(),
         EMAIL_PASSWORD: joi.string().required(),
+        JWT_VERIFICATION_TOKEN_SECRET: joi.string().required(),
+        JWT_VERIFICATION_TOKEN_EXP_TIME: joi.string().required(),
+        EMAIL_CONFIRMATION_URL: joi.string().required(),
       }),
       envFilePath: './.env',
     }),
@@ -50,6 +54,7 @@ import { EmailSchedulingModule } from './email-scheduling/email-scheduling.modul
     LoggerModule,
     HealthModule,
     EmailSchedulingModule,
+    EmailConfirmationModule,
   ],
   controllers: [AppController],
   providers: [

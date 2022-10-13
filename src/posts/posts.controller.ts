@@ -16,6 +16,7 @@ import { IdParams } from '@app/utils/validations';
 import { CurrentUser } from 'src/auth/decorators';
 import { Permission } from 'src/auth/enums';
 import { AllowIfHas } from 'src/auth/guards';
+import { EmailConfirmationGuard } from 'src/email-confirmation/guards';
 
 @Controller('posts')
 export default class PostsController {
@@ -44,12 +45,10 @@ export default class PostsController {
     return this.postsService.deletePost(Number(id));
   }
 
+
   @Get()
+  @UseGuards(EmailConfirmationGuard)
   async getPosts(@Query('search') search: string) {
-    console.log(`called`);
-    
-    console.log(search);
-    
     if (search) {
       return this.postsService.searchForPosts(search);
     }

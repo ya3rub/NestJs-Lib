@@ -10,6 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { EmailConfirmationService } from 'src/email-confirmation/email-confirmation.service';
 import { User } from 'src/users/models/user.entity';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators';
@@ -19,11 +20,18 @@ import { JwtAuthGuard, JwtRefreshGuard, LocalAuthGuard } from './guards';
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly emailConfirmationService: EmailConfirmationService,
+  ) {}
 
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
-    return this.authService.register(registrationData);
+    const user = this.authService.register(registrationData);
+    await this.emailConfirmationService.sendVerificationLink(
+      registrationData.email,
+    );
+    return user;
   }
 
   @UseGuards(LocalAuthGuard)

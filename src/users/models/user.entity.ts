@@ -33,4 +33,7 @@ export class User extends AbstractEntity {
     default: [],
   })
   public permissions: Permission[];
+
+  @Column({ default: false })
+  public isEmailConfirmed: boolean;
 }

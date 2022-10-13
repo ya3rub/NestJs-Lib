@@ -104,7 +104,8 @@
       "^yes/database(|/.*)$": "<rootDir>/libs/database/src/$1",
       "^@app/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
       "^@app/search(|/.*)$": "<rootDir>/libs/search/src/$1",
-      "^@app/email(|/.*)$": "<rootDir>/libs/email/src/$1"
+      "^@app/email(|/.*)$": "<rootDir>/libs/email/src/$1",
+      "^@app/interfaces(|/.*)$": "<rootDir>/libs/interfaces/src/$1"
     }
   }
 }

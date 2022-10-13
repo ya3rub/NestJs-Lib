@@ -41,6 +41,12 @@
       ],
       "@app/email/*": [
         "libs/email/src/*"
+      ],
+      "@app/interfaces": [
+        "libs/interfaces/src"
+      ],
+      "@app/interfaces/*": [
+        "libs/interfaces/src/*"
       ]
     }
   }

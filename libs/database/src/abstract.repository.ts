@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { AbstractEntity } from './absrtact.entity';
 
@@ -13,8 +13,10 @@ export abstract class AbstractRepository<T extends AbstractEntity> {
     return newEntity;
   }
 
-  async update(userId:number,updateQuery : QueryDeepPartialEntity<T>){
-    return await this.entityRepository.update(userId,updateQuery)
+  async updateWhere(
+    findOptions: FindOptionsWhere<T>,
+    updateQuery: QueryDeepPartialEntity<T>,
+  ) {
+    return await this.entityRepository.update(findOptions, updateQuery);
   }
-
 }
