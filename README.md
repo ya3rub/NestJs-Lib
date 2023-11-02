@@ -24,7 +24,9 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+a collection of ready to use utils and templates that a modern application would need such as 2FA, Session Auth, Mailing , Elasticsearch, Logger, DB Setup, and Email Verification.
+
+Select the branch of the feature you want.
 
 ## Installation
 
